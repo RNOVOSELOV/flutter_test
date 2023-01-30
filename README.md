@@ -14,4 +14,7 @@
 ### Версия 1.0
 
 - Minimal Viable Product - построение дерева зависимостей для всех файлов в каталоге, отображение списка частот включений файлов
-<img src="https://github.com/RNOVOSELOV/sources_analyzer/blob/main/images/result_1.png"/>
+
+<p align="center">
+  <img src="https://github.com/RNOVOSELOV/sources_analyzer/blob/main/images/result_1.png" height="300"/>
+</p>

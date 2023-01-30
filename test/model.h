@@ -24,10 +24,11 @@ public:
 	Model();
 	~Model();
 
-	bool setSourseDirectory(string directory);
+	void setSourceDirectory(string);
+	void setSourceDirectory(const path&);
 	string getSourseDirectory() { return sourceDir.u8string(); }
 
-	bool setSourseFilesDirestory(string directory);
+	bool setSourseFilesDirestory(string);
 	AnalyzeResult startExplore();
 
 	const vector<pair<path, int>>& getIncludeFilesFreq() { return includeFiles; }
@@ -35,7 +36,8 @@ public:
 
 private:
 	path sourceDir;							// каталог - отправная точка в которой смотрим исходники
-	list<path> includeDirs;				// список директорий где смотрим библиотечные инклюды 
+	list<path> includeDirs;					// список директорий где смотрим библиотечные инклюды 
+	vector<string> validExtensions;
 
 	vector<pair<path, int>> includeFiles;	// список инклюдов с частотой изпользования
 	vector <Node*> nodes;					// деревья зависимостей для каждого файла в директории 

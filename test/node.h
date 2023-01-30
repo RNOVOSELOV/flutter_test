@@ -10,9 +10,4 @@ struct Node
 	bool isFoundOnFilesystem;
 	bool isDuplicate;
 	std::vector<Node*> childs;
-
-	~Node()
-	{
-		cout << "Removed node: " << nodePath.u8string() << endl;
-	}
 };

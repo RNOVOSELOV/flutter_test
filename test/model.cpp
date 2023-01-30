@@ -8,14 +8,16 @@
 
 Model::Model()
 {
-
+	sourceDir.clear();
+	validExtensions.push_back(".h");
+	validExtensions.push_back(".hpp");
+	validExtensions.push_back(".cpp");
 }
 
 Model::~Model()
 {
 	for (auto it = nodes.begin(); it != nodes.end(); it++)
 	{
-		cout << "FILE: " << (*it)->nodePath.u8string() << endl;
 		cleanNodeTree(*it);
 	}
 	nodes.clear();
@@ -34,15 +36,18 @@ void Model::cleanNodeTree(Node* node)
 	}
 }
 
-bool Model::setSourseDirectory(string directory)
+void Model::setSourceDirectory(string filePath)
 {
-	const path sourceDirectory{ directory };
-	if (!exists(sourceDirectory))
+	const path directory{ filePath };
+	if (exists(directory))
 	{
-		return false;
+		setSourceDirectory(canonical(directory));
 	}
-	sourceDir = canonical(sourceDirectory);
-	return true;
+}
+
+void Model::setSourceDirectory(const path& directory)
+{
+	sourceDir = directory;
 }
 
 bool Model::setSourseFilesDirestory(string directory)
@@ -59,23 +64,34 @@ bool Model::setSourseFilesDirestory(string directory)
 AnalyzeResult Model::startExplore()
 {
 	makeFilesList();
+	if (includeFiles.size() != 0)
+	{
+		sortIncludes();
+	}
 	return AnalyzeResult::successful;
 }
 
 void Model::makeFilesList()
 {
-	for (directory_entry entry : recursive_directory_iterator(sourceDir))
+	if (is_regular_file(sourceDir))
 	{
-		if (entry.is_regular_file())
+		makeRootTreeNode(sourceDir);
+	}
+	else if (is_directory (sourceDir))
+	{
+		for (directory_entry entry : recursive_directory_iterator(sourceDir))
 		{
-			if (entry.path().extension() == ".h" || entry.path().extension() == ".hpp" || entry.path().extension() == ".cpp")
+			if (entry.is_regular_file())
 			{
-				auto p{ entry.path() };
-				makeRootTreeNode(p);
+				if (any_of(validExtensions.begin(), validExtensions.end(), [&entry](auto& item)->bool { return item == entry.path().extension(); }))
+				{
+					auto p{ entry.path() };
+					makeRootTreeNode(p);
+				}
 			}
 		}
 	}
-	sortIncludes();
+	
 }
 
 void Model::sortIncludes()

@@ -3,42 +3,17 @@
 
 #include <iostream>
 
-Presenter::Presenter()
-	:view(make_unique<ConsoleView>())
+Presenter::Presenter(shared_ptr<IView> view, shared_ptr<Model> model)
+	:	view(view),
+		model (model)
 {
-	model = new Model();
 	this->view->setListener(this);
 }
 
 Presenter::~Presenter()
 {
 	view->eraseListener();
-	delete model;
 	cout << "~Presenter" << endl;
-}
-
-bool Presenter::initModel(int argc, char* argv[])
-{
-	auto isValidDirectory{ model->setSourseDirectory(*(argv + 1)) };
-	if (!isValidDirectory)
-	{
-		view->showMessage("Error! Source's directory doesn't exist");
-		return false;
-	}
-	for (int i = 2; i < argc; ++i)
-	{
-		string value = *(argv + i);
-		if (value == "-I")
-		{
-			string directory = *(argv + ++i);
-			auto isValid{ model->setSourseFilesDirestory(directory) };
-			if (!isValid)
-			{
-				view->showMessage("WARNING! Directory " + directory +  " doesn't exist.\n");
-			}
-		}
-	}
-	return true;
 }
 
 void Presenter::startAnalyze()

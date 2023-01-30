@@ -2,6 +2,7 @@
 
 #include <filesystem>
 #include <vector>
+#include <iostream>
 
 struct Node
 {
@@ -9,4 +10,9 @@ struct Node
 	bool isFoundOnFilesystem;
 	bool isDuplicate;
 	std::vector<Node*> childs;
+
+	~Node()
+	{
+		cout << "Removed node: " << nodePath.u8string() << endl;
+	}
 };

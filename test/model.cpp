@@ -15,9 +15,11 @@ Model::~Model()
 {
 	for (auto it = nodes.begin(); it != nodes.end(); it++)
 	{
+		cout << "FILE: " << (*it)->nodePath.u8string() << endl;
 		cleanNodeTree(*it);
 	}
 	nodes.clear();
+	cout << "~Model" << endl;
 }
 
 void Model::cleanNodeTree(Node* node) 

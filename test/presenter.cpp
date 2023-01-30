@@ -1,6 +1,8 @@
 #include "presenter.h"
 #include "consoleView.h"
 
+#include <iostream>
+
 Presenter::Presenter()
 {
 	view = new ConsoleView();
@@ -13,6 +15,7 @@ Presenter::~Presenter()
 	view->eraseListener();
 	delete view;
 	delete model;
+	cout << "~Presenter" << endl;
 }
 
 bool Presenter::initModel(int argc, char* argv[])

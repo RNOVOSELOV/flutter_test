@@ -7,6 +7,11 @@
 #include "consoleView.h"
 #include "node.h"
 
+ConsoleView::~ConsoleView()
+{
+	cout << "~ConsoleView" << endl;
+}
+
 void ConsoleView::showWelcome(const string directory)
 {
 	cout << "Welcome to sources directory explorer!\nWould to see directory statistics: " << directory << " ?\n>>[y/n]";

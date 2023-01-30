@@ -20,6 +20,8 @@
 Пример вызова программы:
 > analyser c:\mysources\ -I c:\mysources\includes -I c:\mylibrary
 
+
+
 <p align="center">
   <img src="https://github.com/RNOVOSELOV/sources_analyzer/blob/main/images/result_1.png" height="300"/>
 </p>

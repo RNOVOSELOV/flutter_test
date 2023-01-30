@@ -4,7 +4,7 @@
 
 ПО написано с применением архитектурного паттерна Model-View-Presenter.
 <p align="center">
-  <img src="https://github.com/RNOVOSELOV/sources_analyzer/blob/main/images/UML.png"/>
+  <img src="https://github.com/RNOVOSELOV/sources_analyzer/blob/main/images/UML.svg"/>
 </p>
 
 Результат работы программы - дерево зависимостей файлов, а также частота включений. Обход файлов происходит рекурсивно, начиная с корневой директории, указанной при запуске программы. Анализируемые файлы должны иметь расширения ".h", ".hpp" либо ".cpp".

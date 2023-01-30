@@ -13,12 +13,11 @@ int main(int argc, char * argv[])
         return 1;
     }
 
-    Presenter* presenter = new Presenter();
+    auto presenter = make_unique<Presenter>();
     auto isModelInit{ presenter->initModel(argc, argv) };
     if (isModelInit)
     {
         presenter->startAnalyze();
     }
-    delete presenter;
     return 0;
 }

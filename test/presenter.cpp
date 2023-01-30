@@ -4,8 +4,8 @@
 #include <iostream>
 
 Presenter::Presenter()
+	:view(make_unique<ConsoleView>())
 {
-	view = new ConsoleView();
 	model = new Model();
 	this->view->setListener(this);
 }
@@ -13,7 +13,6 @@ Presenter::Presenter()
 Presenter::~Presenter()
 {
 	view->eraseListener();
-	delete view;
 	delete model;
 	cout << "~Presenter" << endl;
 }

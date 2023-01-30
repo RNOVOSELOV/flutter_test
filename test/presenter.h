@@ -13,7 +13,7 @@ public:
 
 	void startAnalyze();
 private:
-	IView* view;
+	unique_ptr<IView> view;
 	Model* model;
 };
 

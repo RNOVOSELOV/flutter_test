@@ -1,6 +1,4 @@
-🧑🏼‍💻 Source File Analyzer
-
-# 🧑🏼‍💻 Source File Analyzer
+# 💻 Source File Analyzer
 
 <br/>
 <img src="https://github.com/RNOVOSELOV/sources_analyzer/blob/main/images/UML.png"/>

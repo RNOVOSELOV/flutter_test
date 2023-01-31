@@ -13,14 +13,14 @@ int main(int argc, char * argv[])
         return 1;
     }
 
-	auto model = make_shared<Model>();
+	shared_ptr<IModel> model = make_shared<Model>();
 	for (int i = 1; i < argc; ++i)
 	{
 		string value = *(argv + i);
 		if (value == "-I" && i != argc - 1)
 		{
 			string directory = *(argv + ++i);
-			auto isValid{ model->setSourseFilesDirestory(directory) };
+			auto isValid{ model->setSourceFilesDirectory(directory) };
 			if (!isValid)
 			{
 				view->showMessage("WARNING! Directory \"" + directory + "\" doesn't exist.\n");

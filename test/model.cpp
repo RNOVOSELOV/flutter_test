@@ -8,7 +8,7 @@
 
 Model::Model()
 {
-	sourcePath.clear();
+	
 	validExtensions.push_back(".h");
 	validExtensions.push_back(".hpp");
 	validExtensions.push_back(".cpp");
@@ -21,6 +21,7 @@ Model::~Model()
 		cleanNodeTree(*it);
 	}
 	nodes.clear();
+	cout << " ~ Model" << endl;
 }
 
 void Model::cleanNodeTree(Node* node) 
@@ -35,50 +36,24 @@ void Model::cleanNodeTree(Node* node)
 	}
 }
 
-void Model::setSourceDirectory(string filePath)
-{
-	const path directory{ filePath };
-	if (exists(directory))
-	{
-		setSourceDirectory(canonical(directory));
-	}
-}
-
-void Model::setSourceDirectory(const path& directory)
-{
-	sourcePath = directory;
-}
-
-bool Model::setSourseFilesDirestory(string directory)
-{
-	const path sourcesDirectory{ directory };
-	if (isValidPath(sourcesDirectory))
-	{
-		includeDirs.push_back(canonical(sourcesDirectory));
-		return true;
-	}
-	return false;
-}
-
-AnalyzeResult Model::startExplore()
+void Model::startExplore()
 {
 	startMakeFilesTree();
 	if (includeFiles.size() != 0)
 	{
 		sortIncludes();
 	}
-	return AnalyzeResult::successful;
 }
 
 void Model::startMakeFilesTree()
 {
-	if (is_regular_file(sourcePath))
+	if (is_regular_file(getSourcePath()))
 	{
-		makeRootTreeNode(sourcePath);
+		makeRootTreeNode(getSourcePath());
 	}
-	else if (is_directory (sourcePath))
+	else if (is_directory (getSourcePath()))
 	{
-		for (directory_entry entry : recursive_directory_iterator(sourcePath))
+		for (directory_entry entry : recursive_directory_iterator(getSourcePath()))
 		{
 			if (entry.is_regular_file())
 			{
@@ -121,7 +96,7 @@ void Model::addIncludeFile(path path)
 	includeFiles.push_back(pair(path, 1));
 }
 
-pair <LineRegExpStatus, string> Model::parceFileHeaderLine(string line)
+pair <LineRegExpStatus, string> Model::validationAndParcingHeaderLine(string line)
 {
 	regex directiveRegEx{ "\\s*\\#[\\w\\W]*" };
 	regex includeRegEx { "\\s*\\#include\\s*<[a-zA-Z0-9]+[.]?[h]?>\\s*" };
@@ -151,19 +126,6 @@ string Model::getHeaderFileName (const string rawHeader, const char firstSymbol,
     string str2(it2-it1, '\0');
     copy(rawHeader.begin()+it1, rawHeader.begin()+it2, str2.begin());
     return str2;
-}
-
-bool Model::isValidPath(const path& p, bool checkIsFile)
-{
-	if (!exists(p))
-	{
-		return false;
-	}
-	if (checkIsFile && !is_regular_file(p))
-	{
-		return false;
-	}
-	return true;
 }
 
 void Model::makeRootTreeNode(const path& p)
@@ -206,7 +168,7 @@ void Model::makeTree(const Node* rootNode, Node* parentNode, const path& p, bool
 			}
 			continue;
 		}
-		auto parceLineResult{ parceFileHeaderLine(s) };
+		auto parceLineResult{ validationAndParcingHeaderLine(s) };
 		if (parceLineResult.first == LineRegExpStatus::validIncludeHeader)
 		{
 			Node* node = new Node();
@@ -214,7 +176,7 @@ void Model::makeTree(const Node* rootNode, Node* parentNode, const path& p, bool
 			node->isFoundOnFilesystem = false;
 			path  includeFilePath;
 			bool validFileFound = false;
-			for (auto include : includeDirs)
+			for (auto include : getIncludeDirs())
 			{
 				includeFilePath = include;
 				includeFilePath.append(parceLineResult.second);

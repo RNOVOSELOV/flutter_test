@@ -133,12 +133,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="consoleView.cpp" />
+    <ClCompile Include="imodel.cpp" />
     <ClCompile Include="model.cpp" />
     <ClCompile Include="presenter.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="consoleView.h" />
+    <ClInclude Include="imodel.h" />
     <ClInclude Include="node.h" />
     <ClInclude Include="iviewEvents.h" />
     <ClInclude Include="iview.h" />

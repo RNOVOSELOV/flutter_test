@@ -4,12 +4,8 @@
 #include <vector>
 #include <list>
 
-using namespace std;
-using namespace filesystem;
+#include "imodel.h"
 
-struct Node;
-
-enum class AnalyzeResult {successful, sourceDirError};
 enum class LineRegExpStatus {
 	skipHeaderLine,
 	validLocalHeader,	
@@ -17,41 +13,33 @@ enum class LineRegExpStatus {
 	invalidHeader	
 };
 
-class Model
+class Model: public IModel
 {
 public:
 	Model();
 	~Model();
 
-	void setSourceDirectory(string);
-	void setSourceDirectory(const path&);
-	string getSourseDirectory() { return sourcePath.u8string(); }
+	virtual void startExplore();
+	virtual const vector<pair<path, int>>& getIncludeFilesFreq() { return includeFiles; }
+	virtual const vector <Node*>& getTreeNodes() { return nodes; }
 
-	bool setSourseFilesDirestory(string);
-	AnalyzeResult startExplore();
-
-	const vector<pair<path, int>>& getIncludeFilesFreq() { return includeFiles; }
-	const vector <Node*>& getTreeNodes() { return nodes; }
+protected:
+	pair <LineRegExpStatus, string> validationAndParcingHeaderLine(string line);	// Парсинг строки из хедера на отсновании регулярки
 
 private:
-	path sourcePath;							// каталог - отправная точка в которой смотрим исходники
-	list<path> includeDirs;					// список директорий где смотрим библиотечные инклюды 
 	vector<string> validExtensions;
-
-	vector<pair<path, int>> includeFiles;	// список инклюдов с частотой изпользования
+	vector<pair<path, int>> includeFiles;	// список инклюдов с частотой иcпользования
 	vector <Node*> nodes;					// деревья зависимостей для каждого файла в директории 
 
     string getHeaderFileName (const string rawHeader, const char firstSymbol, const char secondSymbol);	// Парсинг строки инклюда, получение имени файла
-	void cleanNodeTree(Node* node);			// Удаление узла дерева
+	void cleanNodeTree(Node* node);				// Удаление узла дерева
 
 	void startMakeFilesTree();					// Обход файлов
-	void makeRootTreeNode(const path& p);	// Создание рут узла для дерева
+	void makeRootTreeNode(const path& p);		// Создание рут узла для дерева
 	void makeTree(Node* rootNode, const path& p);	
 	void makeTree(const Node * rootNode, Node* parentNode, const path& p, bool calculateIncludes = true);	// Создание узла дерева
 	bool isNodeWithPathExist(const Node* parentNode, const path& p);	// Поиск в дереве присутствует ли такой узел (защита от циклических вложений)
 
-	pair <LineRegExpStatus, string> parceFileHeaderLine(string line);	// Парсинк строки из хедера на отсновании решулярки
 	void addIncludeFile(path path);										// Добавление инклюда в список
 	void sortIncludes();												// Сортировка инклюдов
-	bool isValidPath(const path& p, bool checkIsFile = false);			// Проверка path на валидность
 };

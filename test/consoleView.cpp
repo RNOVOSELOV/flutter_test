@@ -9,7 +9,7 @@
 
 ConsoleView::~ConsoleView()
 {
-
+	cout << " ~ ConsoleView" << endl;
 }
 
 void ConsoleView::showWelcome(const string directory)

@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-Presenter::Presenter(shared_ptr<IView> view, shared_ptr<Model> model)
+Presenter::Presenter(shared_ptr<IView> view, shared_ptr<IModel> model)
 	:	view(view),
 		model (model)
 {
@@ -13,6 +13,7 @@ Presenter::Presenter(shared_ptr<IView> view, shared_ptr<Model> model)
 Presenter::~Presenter()
 {
 	view->eraseListener();
+	cout << " ~ Presenter" << endl;
 }
 
 void Presenter::startAnalyze()
@@ -24,15 +25,8 @@ void Presenter::onWelcomeKeyPressed(char value)
 {
 	if (value == 'Y' || value == 'y')
 	{
-		switch (model->startExplore())
-		{
-		case AnalyzeResult::successful:
-			view->showSourceTreeStructure(model->getTreeNodes());
-			view->showIncludeFrequencies(model->getIncludeFilesFreq());
-			break;
-		case AnalyzeResult::sourceDirError:
-			view->showMessage("Source's directory doesn't exist");
-			break;
-		}
+		model->startExplore();
+		view->showSourceTreeStructure(model->getTreeNodes());
+		view->showIncludeFrequencies(model->getIncludeFilesFreq());
 	}
 }

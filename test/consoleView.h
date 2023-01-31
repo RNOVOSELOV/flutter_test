@@ -6,7 +6,7 @@ class ConsoleView :
     public IView
 {
 public:
-    virtual ~ConsoleView() {}
+    virtual ~ConsoleView();
     virtual void showWelcome(const string directory);
     virtual void showMessage(const string);
 

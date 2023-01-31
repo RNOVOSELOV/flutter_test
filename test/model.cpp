@@ -2,13 +2,16 @@
 #include <fstream>
 #include <regex>
 #include <string>
-
+#include <iostream>
 #include "model.h"
 #include "node.h"
 
 Model::Model()
 {
-
+	sourcePath.clear();
+	validExtensions.push_back(".h");
+	validExtensions.push_back(".hpp");
+	validExtensions.push_back(".cpp");
 }
 
 Model::~Model()
@@ -32,15 +35,18 @@ void Model::cleanNodeTree(Node* node)
 	}
 }
 
-bool Model::setSourseDirectory(string directory)
+void Model::setSourceDirectory(string filePath)
 {
-	const path sourceDirectory{ directory };
-	if (!exists(sourceDirectory))
+	const path directory{ filePath };
+	if (exists(directory))
 	{
-		return false;
+		setSourceDirectory(canonical(directory));
 	}
-	sourceDir = canonical(sourceDirectory);
-	return true;
+}
+
+void Model::setSourceDirectory(const path& directory)
+{
+	sourcePath = directory;
 }
 
 bool Model::setSourseFilesDirestory(string directory)
@@ -56,24 +62,37 @@ bool Model::setSourseFilesDirestory(string directory)
 
 AnalyzeResult Model::startExplore()
 {
-	makeFilesList();
+	startMakeFilesTree();
+	if (includeFiles.size() != 0)
+	{
+		sortIncludes();
+	}
 	return AnalyzeResult::successful;
 }
 
-void Model::makeFilesList()
+void Model::startMakeFilesTree()
 {
-	for (directory_entry entry : recursive_directory_iterator(sourceDir))
+	if (is_regular_file(sourcePath))
 	{
-		if (entry.is_regular_file())
+		makeRootTreeNode(sourcePath);
+	}
+	else if (is_directory (sourcePath))
+	{
+		for (directory_entry entry : recursive_directory_iterator(sourcePath))
 		{
-			if (entry.path().extension() == ".h" || entry.path().extension() == ".hpp" || entry.path().extension() == ".cpp")
+			if (entry.is_regular_file())
 			{
-				auto p{ entry.path() };
-				makeRootTreeNode(p);
+				if (any_of(validExtensions.begin(), validExtensions.end(), 
+					[&entry](auto& item)->bool { return item == entry.path().extension(); })
+					)
+				{
+					auto p{ entry.path() };
+					makeRootTreeNode(p);
+				}
 			}
 		}
 	}
-	sortIncludes();
+	
 }
 
 void Model::sortIncludes()
@@ -192,6 +211,7 @@ void Model::makeTree(const Node* rootNode, Node* parentNode, const path& p, bool
 		{
 			Node* node = new Node();
 			node->isDuplicate = false;
+			node->isFoundOnFilesystem = false;
 			path  includeFilePath;
 			bool validFileFound = false;
 			for (auto include : includeDirs)
@@ -212,13 +232,11 @@ void Model::makeTree(const Node* rootNode, Node* parentNode, const path& p, bool
 			if (!validFileFound)
 			{
 				node->nodePath = parceLineResult.second;
-				node->isFoundOnFilesystem = false;
 				if (calculateIncludes)
 				{
 					addIncludeFile(parceLineResult.second);
 					cout << "\nWARNING! In " << p.u8string() << ": header \"" << parceLineResult.second << "\" not found in -I options directories!" << endl;
 				}
-				
 			}
 			parentNode->childs.push_back(node);
 		}
@@ -236,20 +254,18 @@ void Model::makeTree(const Node* rootNode, Node* parentNode, const path& p, bool
 			node->nodePath = includeFilePath;
 			node->isDuplicate = false;
 
-			auto valueValidPath { isValidPath(includeFilePath, true)};
 			auto valuePathExist { isNodeWithPathExist(rootNode, includeFilePath) };
-			if (valuePathExist == TreeSheetState::sheetIsPersentInTree)
-			{
-				node->isDuplicate = true;
-			}
 
-			if (valueValidPath)
+			if (isValidPath(includeFilePath, true))
 			{
 				node->isFoundOnFilesystem = true;
 			}
 			parentNode->childs.push_back(node);
-
-			if (valuePathExist != TreeSheetState::sheetIsPersentInTree)
+			if (valuePathExist)
+			{
+				node->isDuplicate = true;
+			}
+			else
 			{
 				makeTree(rootNode, node, includeFilePath, false);
 			}
@@ -266,38 +282,28 @@ void Model::makeTree(const Node* rootNode, Node* parentNode, const path& p, bool
 	}
 }
 
-TreeSheetState Model::isNodeWithPathExist(const Node* parentNode, const path& p)
+bool Model::isNodeWithPathExist(const Node* parentNode, const path& p)
 {
 	auto compareValue = parentNode->nodePath.compare(p);
 	if (compareValue == 0)
 	{
-		return TreeSheetState::sheetIsPersentInTree;
+		return true;
 	}
-	if (parentNode->childs.size() == 0)
+	if (parentNode->childs.size() != 0)
 	{
-		return TreeSheetState::seatchNotCompleted;
+		bool oneOfChildIsPath = false;
+		auto it = parentNode->childs.begin();
+		while (it != parentNode->childs.end())
+		{
+			auto value{ isNodeWithPathExist(*it, p) };
+			if (value)
+			{
+				oneOfChildIsPath = value;
+				break;
+			}
+			it++;
+		}
+		return oneOfChildIsPath;
 	}
-	auto it = parentNode->childs.begin();
-	while (it != parentNode->childs.end())
-	{
-		auto value{ isNodeWithPathExist(*it, p) };
-		it++;
-		
-		if (value == TreeSheetState::seatchNotCompleted)
-		{
-			continue;
-		}
-		else if (value == TreeSheetState::sheetIsPersentInTree)
-		{
-			return value;
-		}
-		else if (it == parentNode->childs.end())
-		{
-			return TreeSheetState::seatchNotCompleted;
-		}
-		return value;
-
-	}
-	return TreeSheetState::sheetIsMissingInTree;
-
+	return false;
 }

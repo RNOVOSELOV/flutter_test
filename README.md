@@ -25,7 +25,7 @@
 
 > analyser c:\mysources\ -I c:\mysources\includes -I c:\mylibrary
 
-> analyser -I c:\mysources\includes c:\mysources\main.cpp -I c:\mylibrary c:\mysources\
+> analyser -I c:\mysources\includes c:\mysources\main.cpp -I c:\mylibrary
 
 > analyser -I c:\mysources\includes -I c:\mylibrary c:\mysources\main.cpp
 
@@ -43,7 +43,7 @@
 ### Версия 1.1
 
 - Абстракция модели, возможность быстрой адаптации под другие языки программирования.
-- Расширение списка опций, возможность анализировать отдельные файлы
+- Возможность анализировать отдельные файлы
 
 ### Версия 1.0
 

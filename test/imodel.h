@@ -20,7 +20,7 @@ public:
 	bool setSourceFilesDirectory(std::string);
 	void setSourceDirectory(string);
 	void setSourceDirectory(const path&);
-	string getSourseDirectory() { return sourcePath.u8string(); }
+	string getSourseDirectoryName() { return sourcePath.u8string(); }
 
 protected:
 	list<path> getIncludeDirs() { return includeDirs; }

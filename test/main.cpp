@@ -1,7 +1,7 @@
 #include <iostream>
 // #include "hello.h"
 #include "consoleView.h"
-#include "model.h"
+#include "cppmodel.h"
 #include "presenter.h"
 
 int main(int argc, char * argv[])
@@ -13,7 +13,7 @@ int main(int argc, char * argv[])
         return 1;
     }
 
-	shared_ptr<IModel> model = make_shared<Model>();
+	shared_ptr<IModel> model = make_shared<CppModel>();
 	for (int i = 1; i < argc; ++i)
 	{
 		string value = *(argv + i);
@@ -42,7 +42,7 @@ int main(int argc, char * argv[])
 		}
 	}
 
-	if (model->getSourseDirectory().empty())
+	if (model->getSourseDirectoryName().empty())
 	{
 		view->showMessage("Error! Source's directory not exist on filesystem.\n");
 		return 2;

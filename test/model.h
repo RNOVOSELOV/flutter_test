@@ -24,14 +24,16 @@ public:
 	virtual const vector <Node*>& getTreeNodes() { return nodes; }
 
 protected:
-	pair <LineRegExpStatus, string> validationAndParcingHeaderLine(string line);	// ѕарсинг строки из хедера на отсновании регул€рки
+	virtual pair <LineRegExpStatus, string> validationAndParcingHeaderLine(string line) = 0;	// ѕарсинг строки из хедера на отсновании регул€рки
+
+	void addValidExtension(string ext) { validExtensions.push_back(ext); }
+	string getHeaderFileName(const string rawHeader, const char firstSymbol, const char secondSymbol);	// ѕарсинг строки инклюда, получение имени файла
 
 private:
 	vector<string> validExtensions;
 	vector<pair<path, int>> includeFiles;	// список инклюдов с частотой иcпользовани€
 	vector <Node*> nodes;					// деревь€ зависимостей дл€ каждого файла в директории 
 
-    string getHeaderFileName (const string rawHeader, const char firstSymbol, const char secondSymbol);	// ѕарсинг строки инклюда, получение имени файла
 	void cleanNodeTree(Node* node);				// ”даление узла дерева
 
 	void startMakeFilesTree();					// ќбход файлов

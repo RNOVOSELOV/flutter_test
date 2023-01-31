@@ -18,7 +18,7 @@ Presenter::~Presenter()
 
 void Presenter::startAnalyze()
 {
-	this->view->showWelcome(this->model->getSourseDirectory());
+	this->view->showWelcome(this->model->getSourseDirectoryName());
 }
 
 void Presenter::onWelcomeKeyPressed(char value)

@@ -9,9 +9,6 @@
 Model::Model()
 {
 	
-	validExtensions.push_back(".h");
-	validExtensions.push_back(".hpp");
-	validExtensions.push_back(".cpp");
 }
 
 Model::~Model()
@@ -94,29 +91,6 @@ void Model::addIncludeFile(path path)
 		}
 	}
 	includeFiles.push_back(pair(path, 1));
-}
-
-pair <LineRegExpStatus, string> Model::validationAndParcingHeaderLine(string line)
-{
-	regex directiveRegEx{ "\\s*\\#[\\w\\W]*" };
-	regex includeRegEx { "\\s*\\#include\\s*<[a-zA-Z0-9]+[.]?[h]?>\\s*" };
-	regex localRegEx { "\\s*\\#include\\s*\"[a-zA-Z0-9]+[.]?[h]?\"\\s*" };
-	regex emptyString{ "^\\s*$" };
-	regex commentedLineRegEx{ "\\s*\\/\\/\\s*[\\w\\W]*" };
-
-	if (regex_match(line, includeRegEx))
-	{
-        return pair(LineRegExpStatus::validIncludeHeader, getHeaderFileName(line, '<', '>'));
-	}
-	else if (regex_match(line, localRegEx))
-	{
-        return pair(LineRegExpStatus::validLocalHeader, getHeaderFileName(line, '\"', '\"'));
-	}
-	else if (regex_match(line, emptyString) || regex_match(line, directiveRegEx) || regex_match(line, commentedLineRegEx))
-	{
-		return pair(LineRegExpStatus::skipHeaderLine, "");
-	}
-	return pair(LineRegExpStatus::invalidHeader, "");
 }
 
 string Model::getHeaderFileName (const string rawHeader, const char firstSymbol, const char secondSymbol)

@@ -133,6 +133,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="consoleView.cpp" />
+    <ClCompile Include="cppModel.cpp" />
     <ClCompile Include="imodel.cpp" />
     <ClCompile Include="model.cpp" />
     <ClCompile Include="presenter.cpp" />
@@ -140,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="consoleView.h" />
+    <ClInclude Include="cppModel.h" />
     <ClInclude Include="imodel.h" />
     <ClInclude Include="node.h" />
     <ClInclude Include="iviewEvents.h" />

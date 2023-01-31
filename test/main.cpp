@@ -14,7 +14,6 @@ int main(int argc, char * argv[])
     }
 
 	auto model = make_shared<Model>();
-
 	for (int i = 1; i < argc; ++i)
 	{
 		string value = *(argv + i);
@@ -29,7 +28,6 @@ int main(int argc, char * argv[])
 		}
 		else if (value == "-F" && i != argc - 1)
 		{
-			cout << "-F" << endl;
 			string filePath = *(argv + ++i);
 			const path directory{ filePath };
 			if (exists(directory) && is_regular_file(directory))
@@ -49,7 +47,6 @@ int main(int argc, char * argv[])
 		view->showMessage("Error! Source's directory not exist on filesystem.\n");
 		return 2;
 	}
-
 
     auto presenter = make_unique<Presenter>(view, model);
     presenter->startAnalyze();

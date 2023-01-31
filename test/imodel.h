@@ -18,8 +18,8 @@ public:
 	virtual const vector <Node*>& getTreeNodes() = 0;
 
 	bool setSourceFilesDirectory(std::string);
-	void setSourceDirectory(string);
-	void setSourceDirectory(const path&);
+	bool setSourceDirectory(string);
+	bool setSourceDirectory(const path&);
 	string getSourseDirectoryName() { return sourcePath.u8string(); }
 
 protected:

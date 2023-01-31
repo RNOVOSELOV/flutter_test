@@ -17,18 +17,20 @@ bool IModel::setSourceFilesDirectory(string directory)
 	return false;
 }
 
-void IModel::setSourceDirectory(string filePath)
+bool IModel::setSourceDirectory(string filePath)
 {
 	const path directory{ filePath };
-	if (exists(directory))
+	if (exists(directory) && (is_regular_file(directory) || is_directory(directory)))
 	{
-		setSourceDirectory(canonical(directory));
+		return setSourceDirectory(canonical(directory));
 	}
+	return false;
 }
 
-void IModel::setSourceDirectory(const path& directory)
+bool IModel::setSourceDirectory(const path& directory)
 {
 	sourcePath = directory;
+	return true;
 }
 
 bool IModel::isValidPath(const path& p, bool checkIsFile)

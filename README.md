@@ -14,7 +14,7 @@
 > analyser \<PATH\> [опции]
 
 В качестве PATH указывается путь до анализируемого файла. 
-Если PATH это директория, то дерево зависимостей строится для всех файлов внутри каталога и его поддиректорий.
+Если PATH - директория, то дерево зависимостей строится для всех файлов внутри каталога и его поддиректорий.
 
 Возможные опции:
 
@@ -24,7 +24,9 @@
 Пример вызова программы:
 
 > analyser c:\mysources\ -I c:\mysources\includes -I c:\mylibrary
+
 > analyser -I c:\mysources\includes c:\mysources\main.cpp -I c:\mylibrary c:\mysources\
+
 > analyser -I c:\mysources\includes -I c:\mylibrary c:\mysources\main.cpp
 
 <p align="center">

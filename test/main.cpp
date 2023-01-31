@@ -19,8 +19,7 @@ int main(int argc, char * argv[])
 	shared_ptr<IModel> model = make_shared<DartModel>();
 	for (int i = 1; i < argc; ++i)
 	{
-		string value = (argv[i]);
-		cout << value << endl << endl;
+		string value = *(argv + i);
 		if (value == "-I" && i != argc - 1)
 		{
 			string directory = *(argv + ++i);
@@ -40,7 +39,7 @@ int main(int argc, char * argv[])
 			// Anything parameter without -I prefix
 			if (!model->setSourceDirectory(value))
 			{
-				view->showMessage("WARNING! Incorrect PATH \"" + value + "\" is entered!");
+				view->showMessage("WARNING! Incorrect PATH is entered!");
 			}
 		}
 	}

@@ -3,7 +3,8 @@
 ## О проекте
 
 ПО написано с применением архитектурного паттерна Model-View-Presenter. И легко адаптируется под любой язык программирования.
-UML диаграмма классов представлена ниже [открыть в большом размере]([https://votruk.notion.site/Gifts-Manager-API-fd665c83749e4758b15b3df2de645b44](https://raw.githubusercontent.com/RNOVOSELOV/sources_analyzer/main/images/UML.svg)): 
+UML диаграмма классов представлена ниже [открыть в большом размере](https://raw.githubusercontent.com/RNOVOSELOV/sources_analyzer/main/images/UML.svg):
+
 <p align="center">
   <img src="https://github.com/RNOVOSELOV/sources_analyzer/blob/main/images/UML.svg"/>
 </p>

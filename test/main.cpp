@@ -9,7 +9,7 @@ int main(int argc, char * argv[])
 	shared_ptr<IView> view = make_shared <ConsoleView>();
     if (argc <= 1)
     {
-		view->showMessage("Error! Number of arguments error. Source direstory isn't setted.\n");
+		view->showMessage("Error! Number of arguments error. Source path isn't setted.\n");
         return 1;
     }
 
@@ -23,22 +23,16 @@ int main(int argc, char * argv[])
 			auto isValid{ model->setSourceFilesDirectory(directory) };
 			if (!isValid)
 			{
-				view->showMessage("WARNING! Directory \"" + directory + "\" doesn't exist.\n");
-			}
-		}
-		else if (value == "-F" && i != argc - 1)
-		{
-			string filePath = *(argv + ++i);
-			const path directory{ filePath };
-			if (exists(directory) && is_regular_file(directory))
-			{
-				model->setSourceDirectory(canonical(directory));
+				view->showMessage("WARNING! Directory \"" + directory + "\" not exist.\n");
 			}
 		}
 		else
 		{
-			// Anything parameter without -I or -F parameter prefix
-			model->setSourceDirectory(value);
+			// Anything parameter without -I prefix
+			if (!model->setSourceDirectory(value))
+			{
+				view->showMessage("WARNING! Incorrect PATH \"" + value + "\" is entered!");
+			}
 		}
 	}
 

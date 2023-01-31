@@ -3,6 +3,7 @@
 #include <regex>
 
 CppModel::CppModel()
+	: languageSpecificIncludeSubline ("\\#include")
 {
 	addValidExtension(".h");
 	addValidExtension(".hpp");
@@ -17,8 +18,8 @@ CppModel::~CppModel()
 pair <LineRegExpStatus, string> CppModel::validationAndParcingHeaderLine(string line)
 {
 	regex directiveRegEx{ "\\s*\\#[\\w\\W]*" };
-	regex includeRegEx{ "\\s*\\#include\\s*<[a-zA-Z0-9]+[.]?[h]?>\\s*" };
-	regex localRegEx{ "\\s*\\#include\\s*\"[a-zA-Z0-9]+[.]?[h]?\"\\s*" };
+	regex includeRegEx{ "\\s*" + languageSpecificIncludeSubline + "\\s*<[a-zA-Z0-9]+[.]?[h]?>\\s*" };
+	regex localRegEx{ "\\s*" + languageSpecificIncludeSubline + "\\s*\"[a-zA-Z0-9]+[.]?[h]?\"\\s*" };
 	regex emptyString{ "^\\s*$" };
 	regex commentedLineRegEx{ "\\s*\\/\\/\\s*[\\w\\W]*" };
 

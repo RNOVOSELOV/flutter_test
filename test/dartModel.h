@@ -1,12 +1,12 @@
 #pragma once
 #include "model.h"
 
-class CppModel :
+class DartModel :
     public Model
 {
 public:
-    CppModel();
-    virtual ~CppModel();
+    DartModel();
+    virtual ~DartModel();
 
 protected:
     virtual pair <LineRegExpStatus, string> validationAndParcingHeaderLine(string line);

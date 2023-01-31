@@ -2,6 +2,7 @@
 // #include "hello.h"
 #include "consoleView.h"
 #include "cppmodel.h"
+#include "dartModel.h"
 #include "presenter.h"
 
 int main(int argc, char * argv[])

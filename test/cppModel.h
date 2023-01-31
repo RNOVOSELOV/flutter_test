@@ -13,5 +13,7 @@ protected:
 
 private:
     string languageSpecificIncludeSubline;
+
+    string getHeaderFileName(const string rawHeader, const char firstSymbol, const char secondSymbol);	// Парсинг строки инклюда, получение имени файла
 };
 

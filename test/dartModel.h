@@ -13,5 +13,8 @@ protected:
 
 private:
     string languageSpecificIncludeSubline;
+
+    string getHeaderImportFileName(const string rawHeader, const char firstSymbol, const char secondSymbol);
+    string getHeaderLocalFileName(const string rawHeader, const char firstSymbol, const char secondSymbol);
 };
 

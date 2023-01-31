@@ -20,7 +20,7 @@ bool IModel::setSourceFilesDirectory(string directory)
 bool IModel::setSourceDirectory(string filePath)
 {
 	const path directory{ filePath };
-	if (exists(directory) && (is_regular_file(directory) || is_directory(directory)))
+	if (exists(directory) && (is_regular_file(directory)))// || is_directory(directory)))
 	{
 		return setSourceDirectory(canonical(directory));
 	}
@@ -31,6 +31,17 @@ bool IModel::setSourceDirectory(const path& directory)
 {
 	sourcePath = directory;
 	return true;
+}
+
+bool IModel::setProjectName(string value)
+{
+	const path directory{ value };
+	if (exists(directory) && is_directory(directory))
+	{
+		projectName = directory;
+		return true;
+	}
+	return false;
 }
 
 bool IModel::isValidPath(const path& p, bool checkIsFile)

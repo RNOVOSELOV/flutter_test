@@ -93,15 +93,6 @@ void Model::addIncludeFile(path path)
 	includeFiles.push_back(pair(path, 1));
 }
 
-string Model::getHeaderFileName (const string rawHeader, const char firstSymbol, const char secondSymbol)
-{
-    auto it1 = rawHeader.find_first_of(firstSymbol) +1;
-    auto it2 = rawHeader.find_first_of(secondSymbol, it1);
-    string str2(it2-it1, '\0');
-    copy(rawHeader.begin()+it1, rawHeader.begin()+it2, str2.begin());
-    return str2;
-}
-
 void Model::makeRootTreeNode(const path& p)
 {
 	Node* rootNode = new Node();
@@ -168,11 +159,10 @@ void Model::makeTree(const Node* rootNode, Node* parentNode, const path& p, bool
 			if (!validFileFound)
 			{
 				node->nodePath = parceLineResult.second;
-				if (calculateIncludes)
-				{
+//				if (calculateIncludes)
+//				{
 					addIncludeFile(parceLineResult.second);
-					cout << "\nWARNING! In " << p.u8string() << ": header \"" << parceLineResult.second << "\" not found in -I options directories!" << endl;
-				}
+//				}
 			}
 			parentNode->childs.push_back(node);
 		}
@@ -180,10 +170,10 @@ void Model::makeTree(const Node* rootNode, Node* parentNode, const path& p, bool
 		{
 			path includeFilePath = p.parent_path();
 			includeFilePath.append(parceLineResult.second);
-			if (calculateIncludes)
-			{
+//			if (calculateIncludes)
+//			{
 				addIncludeFile(includeFilePath);
-			}
+//			}
 
 			Node* node = new Node();
 			node->isFoundOnFilesystem = false;

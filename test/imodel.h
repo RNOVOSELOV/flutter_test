@@ -21,13 +21,16 @@ public:
 	bool setSourceDirectory(string);
 	bool setSourceDirectory(const path&);
 	string getSourseDirectoryName() { return sourcePath.u8string(); }
+	bool setProjectName(string param);
 
 protected:
 	list<path> getIncludeDirs() { return includeDirs; }
 	path getSourcePath() { return sourcePath;  }
+	path getProjectName() { return projectName; }
 	bool isValidPath(const path& p, bool checkIsFile = false);	// Проверка path на валидность
 
 private:
 	path sourcePath;											// каталог либо файл для которого строится дерево
 	list<path> includeDirs;										// список директорий где смотрим библиотечные инклюды 
+	path projectName;
 };

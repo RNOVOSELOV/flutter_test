@@ -5,6 +5,8 @@
 #include "dartModel.h"
 #include "presenter.h"
 
+// "C:\android\projects\repo\gift_manager\lib\main.dart" -I "C:\flutter\packages\flutter\lib"
+
 int main(int argc, char * argv[])
 {
 	shared_ptr<IView> view = make_shared <ConsoleView>();
@@ -14,10 +16,11 @@ int main(int argc, char * argv[])
         return 1;
     }
 
-	shared_ptr<IModel> model = make_shared<CppModel>();
+	shared_ptr<IModel> model = make_shared<DartModel>();
 	for (int i = 1; i < argc; ++i)
 	{
-		string value = *(argv + i);
+		string value = (argv[i]);
+		cout << value << endl << endl;
 		if (value == "-I" && i != argc - 1)
 		{
 			string directory = *(argv + ++i);
@@ -26,6 +29,11 @@ int main(int argc, char * argv[])
 			{
 				view->showMessage("WARNING! Directory \"" + directory + "\" not exist.\n");
 			}
+		}
+		else if (value == "-P" && i != argc - 1)
+		{
+			string project = *(argv + ++i);
+			model->setProjectName(project);
 		}
 		else
 		{
@@ -42,7 +50,6 @@ int main(int argc, char * argv[])
 		view->showMessage("Error! Source's directory not exist on filesystem.\n");
 		return 2;
 	}
-
     auto presenter = make_unique<Presenter>(view, model);
     presenter->startAnalyze();
 

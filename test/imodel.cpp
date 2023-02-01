@@ -33,6 +33,17 @@ bool IModel::setSourceDirectory(const path& directory)
 	return true;
 }
 
+bool IModel::setProjectName(string value)
+{
+	const path directory{ value };
+	if (exists(directory) && is_directory(directory))
+	{
+		projectName = directory;
+		return true;
+	}
+	return false;
+}
+
 bool IModel::isValidPath(const path& p, bool checkIsFile)
 {
 	if (!exists(p))

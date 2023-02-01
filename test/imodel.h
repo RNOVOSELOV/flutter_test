@@ -21,6 +21,8 @@ public:
 	bool setSourceDirectory(string);
 	bool setSourceDirectory(const path&);
 	string getSourseDirectoryName() { return sourcePath.u8string(); }
+	bool setProjectName(string param);
+	path getProjectName() { return projectName; }
 
 protected:
 	list<path> getIncludeDirs() { return includeDirs; }
@@ -30,4 +32,5 @@ protected:
 private:
 	path sourcePath;											// каталог либо файл для которого строится дерево
 	list<path> includeDirs;										// список директорий где смотрим библиотечные инклюды 
+	path projectName;
 };

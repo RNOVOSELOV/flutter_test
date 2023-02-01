@@ -27,7 +27,6 @@ protected:
 	virtual pair <LineRegExpStatus, string> validationAndParcingHeaderLine(string line) = 0;	// Парсинг строки из хедера на отсновании регулярки
 
 	void addValidExtension(string ext) { validExtensions.push_back(ext); }
-	string getHeaderFileName(const string rawHeader, const char firstSymbol, const char secondSymbol);	// Парсинг строки инклюда, получение имени файла
 
 private:
 	vector<string> validExtensions;

@@ -92,15 +92,6 @@ void Model::addIncludeFile(path path)
 	includeFiles.push_back(pair(path, 1));
 }
 
-string Model::getHeaderFileName (const string rawHeader, const char firstSymbol, const char secondSymbol)
-{
-	auto it1{ rawHeader.find_first_of(firstSymbol) + 1 };
-	auto it2{ rawHeader.find_first_of(secondSymbol, it1) };
-    string str2(it2-it1, '\0');
-    copy(rawHeader.begin()+it1, rawHeader.begin()+it2, str2.begin());
-    return str2;
-}
-
 void Model::makeRootTreeNode(const path& p)
 {
 	Node* rootNode = new Node();
@@ -165,12 +156,10 @@ void Model::makeTree(const Node* rootNode, Node* parentNode, const path& p)
 			{
 				node->nodePath = parceLineResult.second;
 				includeFilePath = parceLineResult.second;
-//					cout << "\nWARNING! In " << p.u8string() << ": header \"" << parceLineResult.second << "\" not found in -I options directories!" << endl;
 			}
 			parentNode->childs.push_back(node);
 			if (!parentPathHaveInAnotherTrees(rootNode, parentNode->nodePath))
 			{
-				cout << "addInclude " << includeFilePath.u8string();
 				addIncludeFile(includeFilePath);
 			}
 		}
@@ -190,10 +179,8 @@ void Model::makeTree(const Node* rootNode, Node* parentNode, const path& p)
 				node->isFoundOnFilesystem = true;
 			}
 			parentNode->childs.push_back(node);
-	//		cout << "MODEL: " << rootNode->nodePath.filename().u8string() << " " << parentNode->nodePath.filename().u8string() << " " << node->nodePath.filename().u8string() << endl;
 			if (!parentPathHaveInAnotherTrees(rootNode, parentNode->nodePath))
 			{
-				cout << "addInclude " << includeFilePath.u8string()  << endl << endl;
 				addIncludeFile(includeFilePath);
 			}
 			if (valuePathExist)
@@ -246,67 +233,18 @@ bool Model::isNodeWithPathExist(const Node* parentNode, const path& p)
 
 bool Model::parentPathHaveInAnotherTrees(const Node* excludeRootNode, const path& parentPath)
 {
-	cout << "START pathHaveInAnotherTrees ex: " << excludeRootNode->nodePath.filename().u8string()<< " " << parentPath.filename().u8string() << endl;
 	bool isFound = false;
-	
-	int op = 0;
-
 	for (auto it{ nodes.begin() }; it != nodes.end(); it++)
 	{
-		cout << "FOR: " << ++op << " " << nodes.size() << " " << (*it)->nodePath.u8string() << endl;
 		if ((*it)->nodePath.compare(excludeRootNode->nodePath) == 0)
 		{
-			cout << "compare 0 -> continue" << endl;
 			continue;
 		}
 		isFound = isNodeWithPathExist(*it, parentPath);
-		cout << "isNodeWithParentAndChildExist " << isFound << endl;
 		if (isFound)
 		{
-			cout << "break TRUE" << isFound << endl;
 			break;
 		}
 	}
-	cout << "END FALSE" << isFound << endl;
 	return isFound;
 }
-
-/*
-bool Model::isNodeWithParentAndChildExist(const Node* parentNode, const path& parent, const path& child)
-{
-	if (parentNode->childs.size() == 0)
-	{
-		return false;
-	}
-	auto compareValue{ parentNode->nodePath.compare(parent) };
-	cout << "IS: compare " << compareValue << " " << parentNode->nodePath.u8string() << " " << parent.u8string() << endl;
-	if (compareValue == 0)
-	{
-		for (auto i{ parentNode->childs.begin() }; i != parentNode->childs.end(); ++i)
-		{
-			if ((*i)->nodePath.compare(child) == 0)
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-	else
-	{
-		bool found = false;
-		auto it{ parentNode->childs.begin() };
-		while (it != parentNode->childs.end())
-		{
-			auto value{ isNodeWithParentAndChildExist(*it, parent, child) };
-			if (value)
-			{
-				found = value;
-				break;
-			}
-			it++;
-		}
-		return found;
-	}
-	return false;
-}
-*/

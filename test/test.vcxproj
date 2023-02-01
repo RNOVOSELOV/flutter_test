@@ -134,6 +134,7 @@
   <ItemGroup>
     <ClCompile Include="consoleView.cpp" />
     <ClCompile Include="cppModel.cpp" />
+    <ClCompile Include="dartModel.cpp" />
     <ClCompile Include="imodel.cpp" />
     <ClCompile Include="model.cpp" />
     <ClCompile Include="presenter.cpp" />
@@ -142,7 +143,11 @@
   <ItemGroup>
     <ClInclude Include="consoleView.h" />
     <ClInclude Include="cppModel.h" />
+    <ClInclude Include="cppModelFactory.h" />
+    <ClInclude Include="dartModel.h" />
+    <ClInclude Include="dartModelFactory.h" />
     <ClInclude Include="imodel.h" />
+    <ClInclude Include="modelFactory.h" />
     <ClInclude Include="node.h" />
     <ClInclude Include="iviewEvents.h" />
     <ClInclude Include="iview.h" />

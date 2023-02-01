@@ -143,8 +143,11 @@
   <ItemGroup>
     <ClInclude Include="consoleView.h" />
     <ClInclude Include="cppModel.h" />
+    <ClInclude Include="cppModelFactory.h" />
     <ClInclude Include="dartModel.h" />
+    <ClInclude Include="dartModelFactory.h" />
     <ClInclude Include="imodel.h" />
+    <ClInclude Include="modelFactory.h" />
     <ClInclude Include="node.h" />
     <ClInclude Include="iviewEvents.h" />
     <ClInclude Include="iview.h" />

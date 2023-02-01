@@ -22,11 +22,11 @@ public:
 	bool setSourceDirectory(const path&);
 	string getSourseDirectoryName() { return sourcePath.u8string(); }
 	bool setProjectName(string param);
+	path getProjectName() { return projectName; }
 
 protected:
 	list<path> getIncludeDirs() { return includeDirs; }
 	path getSourcePath() { return sourcePath;  }
-	path getProjectName() { return projectName; }
 	bool isValidPath(const path& p, bool checkIsFile = false);	// Проверка path на валидность
 
 private:

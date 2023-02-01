@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LocalDebuggerCommandArguments>"C:\android\projects\repo\gift_manager\lib\" -I "C:\flutter\packages\flutter\lib" -P "C:\android\projects\repo\gift_manager" -I "C:\flutter\.pub-cache\hosted\pub.dartlang.org\flutter_bloc-8.1.1\lib"</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>. -I "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include"</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>

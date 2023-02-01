@@ -11,7 +11,6 @@ DartModel::DartModel()
 
 DartModel::~DartModel()
 {
-	cout << "~DartModel" << endl;
 }
 
 pair <LineRegExpStatus, string> DartModel::validationAndParcingHeaderLine(string line)
@@ -24,11 +23,11 @@ pair <LineRegExpStatus, string> DartModel::validationAndParcingHeaderLine(string
 
 	if (regex_match(line, localRegEx))
 	{
-		return pair(LineRegExpStatus::validLocalHeader, getHeaderLocalFileName(line, '\/', '\''));
+		return pair(LineRegExpStatus::validLocalHeader, getHeaderLocalFileName(line, '/', '\''));
 	}
 	else if (regex_match(line, includeRegEx))
 	{
-		return pair(LineRegExpStatus::validIncludeHeader, getHeaderImportFileName(line, '\/', '\''));
+		return pair(LineRegExpStatus::validIncludeHeader, getHeaderImportFileName(line, '/', '\''));
 	}
 	else if (regex_match(line, emptyString) || regex_match(line, commentedLineRegEx))
 	{

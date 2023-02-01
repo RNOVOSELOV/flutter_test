@@ -13,18 +13,17 @@ Model::Model()
 
 Model::~Model()
 {
-	for (auto it = nodes.begin(); it != nodes.end(); it++)
+	for (auto it{ nodes.begin() }; it != nodes.end(); it++)
 	{
 		cleanNodeTree(*it);
 	}
 	nodes.clear();
-	cout << " ~ Model" << endl;
 }
 
 void Model::cleanNodeTree(Node* node) 
 {
 	if (node != nullptr) {
-		for (auto it = node->childs.begin(); it != node->childs.end(); it++)
+		for (auto it{ node->childs.begin() }; it != node->childs.end(); it++)
 		{
 			cleanNodeTree(*it);
 		}
@@ -108,7 +107,7 @@ void Model::makeTree(Node* rootNode, const path& p)
 	makeTree(rootNode, rootNode, p);
 }
 
-void Model::makeTree(const Node* rootNode, Node* parentNode, const path& p, bool calculateIncludes)
+void Model::makeTree(const Node* rootNode, Node* parentNode, const path& p)
 {
 	regex startCommentRegEx{ "[\\w\\W]*/\\* [\\w\\W] * " };
 	regex endCommentRegEx{ "[\\w\\W]*\\*/[\\w\\W]*" };
@@ -147,34 +146,27 @@ void Model::makeTree(const Node* rootNode, Node* parentNode, const path& p, bool
 				includeFilePath.append(parceLineResult.second);
 				if (isValidPath(includeFilePath, true))
 				{
-					if (calculateIncludes)
-					{
-						addIncludeFile(includeFilePath);
-					}
 					validFileFound = true;
 					node->nodePath = canonical(includeFilePath);
 					node->isFoundOnFilesystem = true;
+					break;
 				}
 			}
 			if (!validFileFound)
 			{
 				node->nodePath = parceLineResult.second;
-//				if (calculateIncludes)
-//				{
-					addIncludeFile(parceLineResult.second);
-//				}
+				includeFilePath = parceLineResult.second;
 			}
 			parentNode->childs.push_back(node);
+			if (!parentPathHaveInAnotherTrees(rootNode, parentNode->nodePath))
+			{
+				addIncludeFile(includeFilePath);
+			}
 		}
 		else if (parceLineResult.first == LineRegExpStatus::validLocalHeader)
 		{
 			path includeFilePath = p.parent_path();
 			includeFilePath.append(parceLineResult.second);
-//			if (calculateIncludes)
-//			{
-				addIncludeFile(includeFilePath);
-//			}
-
 			Node* node = new Node();
 			node->isFoundOnFilesystem = false;
 			node->nodePath = includeFilePath;
@@ -187,13 +179,17 @@ void Model::makeTree(const Node* rootNode, Node* parentNode, const path& p, bool
 				node->isFoundOnFilesystem = true;
 			}
 			parentNode->childs.push_back(node);
+			if (!parentPathHaveInAnotherTrees(rootNode, parentNode->nodePath))
+			{
+				addIncludeFile(includeFilePath);
+			}
 			if (valuePathExist)
 			{
 				node->isDuplicate = true;
 			}
 			else
 			{
-				makeTree(rootNode, node, includeFilePath, false);
+				makeTree(rootNode, node, includeFilePath);
 			}
 		}
 		else if (parceLineResult.first == LineRegExpStatus::skipHeaderLine)
@@ -210,7 +206,7 @@ void Model::makeTree(const Node* rootNode, Node* parentNode, const path& p, bool
 
 bool Model::isNodeWithPathExist(const Node* parentNode, const path& p)
 {
-	auto compareValue = parentNode->nodePath.compare(p);
+	auto compareValue{ parentNode->nodePath.compare(p) };
 	if (compareValue == 0)
 	{
 		return true;
@@ -218,7 +214,7 @@ bool Model::isNodeWithPathExist(const Node* parentNode, const path& p)
 	if (parentNode->childs.size() != 0)
 	{
 		bool oneOfChildIsPath = false;
-		auto it = parentNode->childs.begin();
+		auto it{ parentNode->childs.begin() };
 		while (it != parentNode->childs.end())
 		{
 			auto value{ isNodeWithPathExist(*it, p) };
@@ -232,4 +228,23 @@ bool Model::isNodeWithPathExist(const Node* parentNode, const path& p)
 		return oneOfChildIsPath;
 	}
 	return false;
+}
+
+
+bool Model::parentPathHaveInAnotherTrees(const Node* excludeRootNode, const path& parentPath)
+{
+	bool isFound = false;
+	for (auto it{ nodes.begin() }; it != nodes.end(); it++)
+	{
+		if ((*it)->nodePath.compare(excludeRootNode->nodePath) == 0)
+		{
+			continue;
+		}
+		isFound = isNodeWithPathExist(*it, parentPath);
+		if (isFound)
+		{
+			break;
+		}
+	}
+	return isFound;
 }

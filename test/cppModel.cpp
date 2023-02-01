@@ -12,7 +12,7 @@ CppModel::CppModel()
 
 CppModel::~CppModel()
 {
-	cout << "~CppModel" << endl;
+
 }
 
 pair <LineRegExpStatus, string> CppModel::validationAndParcingHeaderLine(string line)
@@ -44,6 +44,5 @@ string CppModel::getHeaderFileName(const string rawHeader, const char firstSymbo
 	auto it2 = rawHeader.find_first_of(secondSymbol, it1);
 	string str2(it2 - it1, '\0');
 	copy(rawHeader.begin() + it1, rawHeader.begin() + it2, str2.begin());
-	cout << "Package: " << str2 << endl;
 	return str2;
 }

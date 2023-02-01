@@ -13,7 +13,6 @@ Presenter::Presenter(shared_ptr<IView> view, shared_ptr<IModel> model)
 Presenter::~Presenter()
 {
 	view->eraseListener();
-	cout << " ~ Presenter" << endl;
 }
 
 void Presenter::startAnalyze()

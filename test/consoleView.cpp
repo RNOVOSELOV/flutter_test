@@ -1,15 +1,11 @@
 #include <iostream>
-/*
-#include "consoleView.h"
-#include "model.h"
-#include "presenter.h"
-*/
+
 #include "consoleView.h"
 #include "node.h"
 
 ConsoleView::~ConsoleView()
 {
-	cout << " ~ ConsoleView" << endl;
+
 }
 
 void ConsoleView::showWelcome(const string directory)

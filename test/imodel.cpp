@@ -20,7 +20,7 @@ bool IModel::setSourceFilesDirectory(string directory)
 bool IModel::setSourceDirectory(string filePath)
 {
 	const path directory{ filePath };
-	if (exists(directory) && (is_regular_file(directory)))// || is_directory(directory)))
+	if (exists(directory) && (is_regular_file(directory) || is_directory(directory)))
 	{
 		return setSourceDirectory(canonical(directory));
 	}

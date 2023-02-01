@@ -38,8 +38,9 @@ private:
 	void startMakeFilesTree();					// Обход файлов
 	void makeRootTreeNode(const path& p);		// Создание рут узла для дерева
 	void makeTree(Node* rootNode, const path& p);	
-	void makeTree(const Node * rootNode, Node* parentNode, const path& p, bool calculateIncludes = true);	// Создание узла дерева
+	void makeTree(const Node * rootNode, Node* parentNode, const path& p);	// Создание узла дерева
 	bool isNodeWithPathExist(const Node* parentNode, const path& p);	// Поиск в дереве присутствует ли такой узел (защита от циклических вложений)
+	bool parentPathHaveInAnotherTrees(const Node* excludeRootNode, const path&);
 
 	void addIncludeFile(path path);										// Добавление инклюда в список
 	void sortIncludes();												// Сортировка инклюдов

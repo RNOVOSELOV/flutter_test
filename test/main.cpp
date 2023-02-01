@@ -1,7 +1,7 @@
 #include <iostream>
 // #include "hello.h"
 #include "consoleView.h"
-#include "cppmodel.h"
+#include "cppModel.h"
 #include "presenter.h"
 
 int main(int argc, char * argv[])
@@ -42,7 +42,7 @@ int main(int argc, char * argv[])
 		return 2;
 	}
 
-    auto presenter = make_unique<Presenter>(view, model);
+	auto presenter{ make_unique<Presenter>(view, model) };
     presenter->startAnalyze();
 
     return 0;

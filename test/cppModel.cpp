@@ -11,7 +11,7 @@ CppModel::CppModel()
 
 CppModel::~CppModel()
 {
-	cout << "~CppModel" << endl;
+
 }
 
 pair <LineRegExpStatus, string> CppModel::validationAndParcingHeaderLine(string line)

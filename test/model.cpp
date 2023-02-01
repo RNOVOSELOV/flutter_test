@@ -13,18 +13,17 @@ Model::Model()
 
 Model::~Model()
 {
-	for (auto it = nodes.begin(); it != nodes.end(); it++)
+	for (auto it{ nodes.begin() }; it != nodes.end(); it++)
 	{
 		cleanNodeTree(*it);
 	}
 	nodes.clear();
-	cout << " ~ Model" << endl;
 }
 
 void Model::cleanNodeTree(Node* node) 
 {
 	if (node != nullptr) {
-		for (auto it = node->childs.begin(); it != node->childs.end(); it++)
+		for (auto it{ node->childs.begin() }; it != node->childs.end(); it++)
 		{
 			cleanNodeTree(*it);
 		}
@@ -95,8 +94,8 @@ void Model::addIncludeFile(path path)
 
 string Model::getHeaderFileName (const string rawHeader, const char firstSymbol, const char secondSymbol)
 {
-    auto it1 = rawHeader.find_first_of(firstSymbol) +1;
-    auto it2 = rawHeader.find_first_of(secondSymbol, it1);
+	auto it1{ rawHeader.find_first_of(firstSymbol) + 1 };
+	auto it2{ rawHeader.find_first_of(secondSymbol, it1) };
     string str2(it2-it1, '\0');
     copy(rawHeader.begin()+it1, rawHeader.begin()+it2, str2.begin());
     return str2;
@@ -117,7 +116,7 @@ void Model::makeTree(Node* rootNode, const path& p)
 	makeTree(rootNode, rootNode, p);
 }
 
-void Model::makeTree(const Node* rootNode, Node* parentNode, const path& p, bool calculateIncludes)
+void Model::makeTree(const Node* rootNode, Node* parentNode, const path& p)
 {
 	regex startCommentRegEx{ "[\\w\\W]*/\\* [\\w\\W] * " };
 	regex endCommentRegEx{ "[\\w\\W]*\\*/[\\w\\W]*" };
@@ -156,35 +155,29 @@ void Model::makeTree(const Node* rootNode, Node* parentNode, const path& p, bool
 				includeFilePath.append(parceLineResult.second);
 				if (isValidPath(includeFilePath, true))
 				{
-					if (calculateIncludes)
-					{
-						addIncludeFile(includeFilePath);
-					}
 					validFileFound = true;
 					node->nodePath = canonical(includeFilePath);
 					node->isFoundOnFilesystem = true;
+					break;
 				}
 			}
 			if (!validFileFound)
 			{
 				node->nodePath = parceLineResult.second;
-				if (calculateIncludes)
-				{
-					addIncludeFile(parceLineResult.second);
-					cout << "\nWARNING! In " << p.u8string() << ": header \"" << parceLineResult.second << "\" not found in -I options directories!" << endl;
-				}
+				includeFilePath = parceLineResult.second;
+//					cout << "\nWARNING! In " << p.u8string() << ": header \"" << parceLineResult.second << "\" not found in -I options directories!" << endl;
 			}
 			parentNode->childs.push_back(node);
+			if (!parentPathHaveInAnotherTrees(rootNode, parentNode->nodePath))
+			{
+				cout << "addInclude " << includeFilePath.u8string();
+				addIncludeFile(includeFilePath);
+			}
 		}
 		else if (parceLineResult.first == LineRegExpStatus::validLocalHeader)
 		{
 			path includeFilePath = p.parent_path();
 			includeFilePath.append(parceLineResult.second);
-			if (calculateIncludes)
-			{
-				addIncludeFile(includeFilePath);
-			}
-
 			Node* node = new Node();
 			node->isFoundOnFilesystem = false;
 			node->nodePath = includeFilePath;
@@ -197,13 +190,19 @@ void Model::makeTree(const Node* rootNode, Node* parentNode, const path& p, bool
 				node->isFoundOnFilesystem = true;
 			}
 			parentNode->childs.push_back(node);
+	//		cout << "MODEL: " << rootNode->nodePath.filename().u8string() << " " << parentNode->nodePath.filename().u8string() << " " << node->nodePath.filename().u8string() << endl;
+			if (!parentPathHaveInAnotherTrees(rootNode, parentNode->nodePath))
+			{
+				cout << "addInclude " << includeFilePath.u8string()  << endl << endl;
+				addIncludeFile(includeFilePath);
+			}
 			if (valuePathExist)
 			{
 				node->isDuplicate = true;
 			}
 			else
 			{
-				makeTree(rootNode, node, includeFilePath, false);
+				makeTree(rootNode, node, includeFilePath);
 			}
 		}
 		else if (parceLineResult.first == LineRegExpStatus::skipHeaderLine)
@@ -220,7 +219,7 @@ void Model::makeTree(const Node* rootNode, Node* parentNode, const path& p, bool
 
 bool Model::isNodeWithPathExist(const Node* parentNode, const path& p)
 {
-	auto compareValue = parentNode->nodePath.compare(p);
+	auto compareValue{ parentNode->nodePath.compare(p) };
 	if (compareValue == 0)
 	{
 		return true;
@@ -228,7 +227,7 @@ bool Model::isNodeWithPathExist(const Node* parentNode, const path& p)
 	if (parentNode->childs.size() != 0)
 	{
 		bool oneOfChildIsPath = false;
-		auto it = parentNode->childs.begin();
+		auto it{ parentNode->childs.begin() };
 		while (it != parentNode->childs.end())
 		{
 			auto value{ isNodeWithPathExist(*it, p) };
@@ -243,3 +242,71 @@ bool Model::isNodeWithPathExist(const Node* parentNode, const path& p)
 	}
 	return false;
 }
+
+
+bool Model::parentPathHaveInAnotherTrees(const Node* excludeRootNode, const path& parentPath)
+{
+	cout << "START pathHaveInAnotherTrees ex: " << excludeRootNode->nodePath.filename().u8string()<< " " << parentPath.filename().u8string() << endl;
+	bool isFound = false;
+	
+	int op = 0;
+
+	for (auto it{ nodes.begin() }; it != nodes.end(); it++)
+	{
+		cout << "FOR: " << ++op << " " << nodes.size() << " " << (*it)->nodePath.u8string() << endl;
+		if ((*it)->nodePath.compare(excludeRootNode->nodePath) == 0)
+		{
+			cout << "compare 0 -> continue" << endl;
+			continue;
+		}
+		isFound = isNodeWithPathExist(*it, parentPath);
+		cout << "isNodeWithParentAndChildExist " << isFound << endl;
+		if (isFound)
+		{
+			cout << "break TRUE" << isFound << endl;
+			break;
+		}
+	}
+	cout << "END FALSE" << isFound << endl;
+	return isFound;
+}
+
+/*
+bool Model::isNodeWithParentAndChildExist(const Node* parentNode, const path& parent, const path& child)
+{
+	if (parentNode->childs.size() == 0)
+	{
+		return false;
+	}
+	auto compareValue{ parentNode->nodePath.compare(parent) };
+	cout << "IS: compare " << compareValue << " " << parentNode->nodePath.u8string() << " " << parent.u8string() << endl;
+	if (compareValue == 0)
+	{
+		for (auto i{ parentNode->childs.begin() }; i != parentNode->childs.end(); ++i)
+		{
+			if ((*i)->nodePath.compare(child) == 0)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	else
+	{
+		bool found = false;
+		auto it{ parentNode->childs.begin() };
+		while (it != parentNode->childs.end())
+		{
+			auto value{ isNodeWithParentAndChildExist(*it, parent, child) };
+			if (value)
+			{
+				found = value;
+				break;
+			}
+			it++;
+		}
+		return found;
+	}
+	return false;
+}
+*/

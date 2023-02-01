@@ -33,7 +33,7 @@ UML диаграмма классов представлена ниже, либ�
 
 > analyser c:\mysources\ -I c:\mysources\includes -I c:\mylibrary -С
 
-> analyser -I c:\mysources\includes -D c:\mysources\main.cpp -I c:\mylibrary
+> analyser c:\mysources\poject_name\lib\test\main.dart -I c:\mysources\includes -D -P c:\mysources\poject_name
 
 > analyser -I c:\mysources\includes -I c:\mylibrary c:\mysources\main.cpp
 

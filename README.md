@@ -6,7 +6,7 @@
 UML диаграмма классов представлена ниже, либо [открыть в большом размере (SVG)](https://raw.githubusercontent.com/RNOVOSELOV/sources_analyzer/main/images/UML.svg).
 
 <p align="center">
-	[<img src="https://github.com/RNOVOSELOV/sources_analyzer/blob/main/images/UML.svg">](https://raw.githubusercontent.com/RNOVOSELOV/sources_analyzer/main/images/UML.svg)
+	<img src="https://github.com/RNOVOSELOV/sources_analyzer/blob/main/images/UML.svg">
 </p>
 
 Результат работы программы - дерево зависимостей файлов, а также частота включений. 

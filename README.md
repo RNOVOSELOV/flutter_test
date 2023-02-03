@@ -1,4 +1,4 @@
-[<img src="https://isocpp.org/assets/images/cpp_logo.png"  width="150">](https://isocpp.org/) 
+[<img src="https://isocpp.org/assets/images/cpp_logo.png"  width="75">](https://isocpp.org/) 
 
 # 🌳 Build source files dependency tree
 

@@ -34,11 +34,31 @@ void Model::cleanNodeTree(Node* node)
 
 void Model::startExplore()
 {
+	includes.clear();
 	startMakeFilesTree();
-	if (includeFiles.size() != 0)
+}
+
+const vector<pair<string, int>>& Model::getIncludeFilesFreq()
+{
+	for (auto unique : uniqueIncludes)
 	{
-		sortIncludes();
+		bool addToInclude = true;
+		for (auto include {includes.begin ()}; include != includes.end(); ++include)
+		{
+			if (unique.filename().u8string() == (*include).first)
+			{
+				addToInclude = false;
+				(*include).second = (*include).second + 1;
+				break;
+			}
+		}
+		if (addToInclude)
+		{
+			includes.push_back(std::pair(unique.filename().u8string(), 1));
+		}
 	}
+	sortIncludes(includes);
+	return includes;
 }
 
 void Model::startMakeFilesTree()
@@ -66,14 +86,14 @@ void Model::startMakeFilesTree()
 	
 }
 
-void Model::sortIncludes()
+void Model::sortIncludes(vector <pair<string, int>>& includes)
 {
-	std::sort(includeFiles.begin(), includeFiles.end(),
-		[](pair <path, int>& a, pair <path, int>& b)
+	std::sort(includes.begin(), includes.end(),
+		[](pair <string, int>& a, pair <string, int>& b)
 		{
 			if (a.second == b.second)
 			{
-				return a.first.filename() < b.first.filename();
+				return a.first < b.first;
 			}
 	return a.second > b.second;
 		});
@@ -81,15 +101,14 @@ void Model::sortIncludes()
 
 void Model::addIncludeFile(path path)
 {
-	for (int i = 0; i < includeFiles.size(); ++i)
+	for (auto tempPath : uniqueIncludes)
 	{
-		if (includeFiles[i].first == path)
+		if (path.compare(tempPath) == 0)
 		{
-			++includeFiles[i].second;
 			return;
 		}
 	}
-	includeFiles.push_back(pair(path, 1));
+	uniqueIncludes.push_back(path);
 }
 
 void Model::makeRootTreeNode(const path& p)
@@ -158,10 +177,7 @@ void Model::makeTree(const Node* rootNode, Node* parentNode, const path& p)
 				includeFilePath = parceLineResult.second;
 			}
 			parentNode->childs.push_back(node);
-			if (!parentPathHaveInAnotherTrees(rootNode, parentNode->nodePath))
-			{
-				addIncludeFile(includeFilePath);
-			}
+			addIncludeFile(createUniqueIncludePath(p.parent_path(), p.filename().u8string(), parceLineResult.second));
 		}
 		else if (parceLineResult.first == LineRegExpStatus::validLocalHeader)
 		{
@@ -179,10 +195,8 @@ void Model::makeTree(const Node* rootNode, Node* parentNode, const path& p)
 				node->isFoundOnFilesystem = true;
 			}
 			parentNode->childs.push_back(node);
-			if (!parentPathHaveInAnotherTrees(rootNode, parentNode->nodePath))
-			{
-				addIncludeFile(includeFilePath);
-			}
+
+			addIncludeFile(createUniqueIncludePath(p.parent_path(), p.filename().u8string(), parceLineResult.second));
 			if (valuePathExist)
 			{
 				node->isDuplicate = true;
@@ -202,6 +216,14 @@ void Model::makeTree(const Node* rootNode, Node* parentNode, const path& p)
 			break;
 		}
 	}
+}
+
+path Model::createUniqueIncludePath(const path& parentPath, const string& fileName, const string& includeName)
+{
+	path uniqueIncludeFilePath{ parentPath };
+	uniqueIncludeFilePath.append(fileName);
+	uniqueIncludeFilePath.append(includeName);
+	return uniqueIncludeFilePath;
 }
 
 bool Model::isNodeWithPathExist(const Node* parentNode, const path& p)
@@ -228,23 +250,4 @@ bool Model::isNodeWithPathExist(const Node* parentNode, const path& p)
 		return oneOfChildIsPath;
 	}
 	return false;
-}
-
-
-bool Model::parentPathHaveInAnotherTrees(const Node* excludeRootNode, const path& parentPath)
-{
-	bool isFound = false;
-	for (auto it{ nodes.begin() }; it != nodes.end(); it++)
-	{
-		if ((*it)->nodePath.compare(excludeRootNode->nodePath) == 0)
-		{
-			continue;
-		}
-		isFound = isNodeWithPathExist(*it, parentPath);
-		if (isFound)
-		{
-			break;
-		}
-	}
-	return isFound;
 }

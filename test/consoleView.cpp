@@ -44,11 +44,11 @@ void ConsoleView::printNodeTree(const Node* node, const string prefix)
 	}
 	string notFoundSymbol = node->isFoundOnFilesystem ? "" : "DEL";
 	string duplicateSymbol = node->isDuplicate ? "REP" : "";
-	cout <<setw(3) << notFoundSymbol << " " << setw(3) << duplicateSymbol << " " << prefix << node->nodePath.filename().u8string() << endl;
+	cout << " " << setw(3) << duplicateSymbol << " " << setw(3) << notFoundSymbol << " " << prefix << node->nodePath.filename().u8string() << endl;
 
 	if (prefix.length() == 0 && node->childs.size() == 0)
 	{
-		cout << "        " << "<include list is empty>" << endl;
+		cout << "         " << "<include list is empty>" << endl;
 	}
 	for (auto child : node->childs)
 	{
@@ -56,11 +56,11 @@ void ConsoleView::printNodeTree(const Node* node, const string prefix)
 	}
 }
 
-void ConsoleView::showIncludeFrequencies(const vector<pair<std::filesystem::path, int>>& includes)
+void ConsoleView::showIncludeFrequencies(const vector<pair<string, int>>& includes)
 {
-	cout << endl;
+	cout  << endl;
 	for (auto p : includes)
 	{
-		cout << p.second << "\t" << p.first.filename().u8string()  << endl;
+		cout << " " << p.second << "\t" << p.first << endl;
 	}
 }

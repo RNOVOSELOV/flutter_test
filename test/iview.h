@@ -17,5 +17,5 @@ public:
 	virtual void showMessage(const string) = 0;
 
 	virtual void showSourceTreeStructure (const vector <Node *>&) = 0;
-	virtual void showIncludeFrequencies(const vector<pair<std::filesystem::path, int>>&) = 0;
+	virtual void showIncludeFrequencies(const vector<pair<string, int>>&) = 0;
 };

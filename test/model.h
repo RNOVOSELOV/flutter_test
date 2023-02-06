@@ -20,7 +20,7 @@ public:
 	~Model();
 
 	virtual void startExplore();
-	virtual const vector<pair<path, int>>& getIncludeFilesFreq() { return includeFiles; }
+	virtual const vector<pair<string, int>>& getIncludeFilesFreq();
 	virtual const vector <Node*>& getTreeNodes() { return nodes; }
 
 protected:
@@ -30,7 +30,8 @@ protected:
 
 private:
 	vector<string> validExtensions;
-	vector<pair<path, int>> includeFiles;	// список инклюдов с частотой иcпользовани€
+	vector <pair<string, int>> includes;	// список инклюдов с частотой иcпользовани€
+	vector<path> uniqueIncludes;
 	vector <Node*> nodes;					// деревь€ зависимостей дл€ каждого файла в директории 
 
 	void cleanNodeTree(Node* node);				// ”даление узла дерева
@@ -40,8 +41,8 @@ private:
 	void makeTree(Node* rootNode, const path& p);	
 	void makeTree(const Node * rootNode, Node* parentNode, const path& p);	// —оздание узла дерева
 	bool isNodeWithPathExist(const Node* parentNode, const path& p);	// ѕоиск в дереве присутствует ли такой узел (защита от циклических вложений)
-	bool parentPathHaveInAnotherTrees(const Node* excludeRootNode, const path&);
 
 	void addIncludeFile(path path);										// ƒобавление инклюда в список
-	void sortIncludes();												// —ортировка инклюдов
+	void sortIncludes(vector <pair<string, int>>&);
+	path createUniqueIncludePath(const path&, const string&, const string&);
 };

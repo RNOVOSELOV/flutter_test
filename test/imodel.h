@@ -14,7 +14,7 @@ public:
 	virtual ~IModel() = default;
 
 	virtual void startExplore() = 0;
-	virtual const vector<pair<path, int>>& getIncludeFilesFreq() = 0;
+	virtual const vector<pair<string, int>>& getIncludeFilesFreq() = 0;
 	virtual const vector <Node*>& getTreeNodes() = 0;
 
 	bool setSourceFilesDirectory(std::string);

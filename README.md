@@ -93,6 +93,6 @@ UML диаграмма классов представлена ниже, либ�
 
 
 <p align="center">
-	[LICENSE](https://raw.githubusercontent.com/RNOVOSELOV/sources_analyzer/main/LICENSE)
+	<p>[LICENSE](https://raw.githubusercontent.com/RNOVOSELOV/sources_analyzer/main/LICENSE)</p>
 </p>
 

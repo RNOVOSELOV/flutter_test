@@ -2,9 +2,6 @@
 
 #include <string>
 
-using namespace std;
-using namespace filesystem;
-
 struct Node;
 
 class IModel {
@@ -14,23 +11,23 @@ public:
 	virtual ~IModel() = default;
 
 	virtual void startExplore() = 0;
-	virtual const vector<pair<string, int>>& getIncludeFilesFreq() = 0;
-	virtual const vector <Node*>& getTreeNodes() = 0;
+	virtual const std::vector<std::pair<std::string, int>>& getIncludeFilesFreq() = 0;
+	virtual const std::vector <Node*>& getTreeNodes() = 0;
 
 	bool setSourceFilesDirectory(std::string);
-	bool setSourceDirectory(string);
-	bool setSourceDirectory(const path&);
-	string getSourseDirectoryName() { return sourcePath.u8string(); }
-	bool setProjectName(string param);
-	path getProjectName() { return projectName; }
+	bool setSourceDirectory(std::string);
+	bool setSourceDirectory(const std::filesystem::path&);
+	std::string getSourseDirectoryName() { return sourcePath.u8string(); }
+	bool setProjectName(std::string param);
+	std::filesystem::path getProjectName() { return projectName; }
 
 protected:
-	list<path> getIncludeDirs() { return includeDirs; }
-	path getSourcePath() { return sourcePath;  }
-	bool isValidPath(const path& p, bool checkIsFile = false);	// Проверка path на валидность
+	std::list<std::filesystem::path> getIncludeDirs() { return includeDirs; }
+	std::filesystem::path getSourcePath() { return sourcePath;  }
+	bool isValidPath(const std::filesystem::path& p, bool checkIsFile = false);	// Проверка path на валидность
 
 private:
-	path sourcePath;											// каталог либо файл для которого строится дерево
-	list<path> includeDirs;										// список директорий где смотрим библиотечные инклюды 
-	path projectName;
+	std::filesystem::path sourcePath;											// каталог либо файл для которого строится дерево
+	std::list<std::filesystem::path> includeDirs;										// список директорий где смотрим библиотечные инклюды 
+	std::filesystem::path projectName;
 };

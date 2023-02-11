@@ -11,7 +11,7 @@
 
 int main(int argc, char * argv[])
 {
-	shared_ptr<IView> view = make_shared <ConsoleView>();
+	std::shared_ptr<IView> view = std::make_shared <ConsoleView>();
     if (argc <= 1)
     {
 		view->showMessage("Error! Number of arguments error. Source path isn't setted.\n");
@@ -38,7 +38,7 @@ int main(int argc, char * argv[])
 		factory = new CppModelFactory();
 	}
 
-	shared_ptr<IModel> model = factory->createModel();
+	std::shared_ptr<IModel> model = factory->createModel();
 	delete factory;
 	for (int i = 1; i < argc; ++i)
 	{
@@ -83,7 +83,7 @@ int main(int argc, char * argv[])
 		return 3;
 	}
 
-	auto presenter{ make_unique<Presenter>(view, model) };
+	auto presenter{ std::make_unique<Presenter>(view, model) };
     presenter->startAnalyze();
 
     return 0;

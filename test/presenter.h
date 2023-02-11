@@ -6,12 +6,12 @@
 class Presenter:IViewEvents
 {
 public:
-	Presenter(shared_ptr<IView>, shared_ptr<IModel>);
+	Presenter(std::shared_ptr<IView>, std::shared_ptr<IModel>);
 	virtual ~Presenter();
 	virtual void onWelcomeKeyPressed(char value);
 	void startAnalyze();
 private:
-	shared_ptr<IView> view;
-	shared_ptr<IModel> model;
+	std::shared_ptr<IView> view;
+	std::shared_ptr<IModel> model;
 };
 

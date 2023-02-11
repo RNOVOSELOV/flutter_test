@@ -13,6 +13,11 @@ enum class LineRegExpStatus {
 	invalidHeader	
 };
 
+using std::string;
+using std::vector;
+using std::pair;
+using std::filesystem::path;
+
 class Model: public IModel
 {
 public:

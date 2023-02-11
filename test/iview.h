@@ -7,15 +7,14 @@
 #include "iviewEvents.h"
 #include "viewEventsNotifier.h"
 
-using namespace std;
 struct Node;
 
 class IView: public ViewEventsNotifier<IViewEvents>  {
 public:
 	virtual ~IView() = default;
-	virtual void showWelcome(const string directory) = 0;
-	virtual void showMessage(const string) = 0;
+	virtual void showWelcome(const std::string directory) = 0;
+	virtual void showMessage(const std::string) = 0;
 
-	virtual void showSourceTreeStructure (const vector <Node *>&) = 0;
-	virtual void showIncludeFrequencies(const vector<pair<string, int>>&) = 0;
+	virtual void showSourceTreeStructure (const std::vector <Node *>&) = 0;
+	virtual void showIncludeFrequencies(const std::vector<std::pair<std::string, int>>&) = 0;
 };

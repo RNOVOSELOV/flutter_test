@@ -69,7 +69,7 @@ void Model::startMakeFilesTree()
 	}
 	else if (is_directory (getSourcePath()))
 	{
-		for (directory_entry entry : recursive_directory_iterator(getSourcePath()))
+		for (std::filesystem::directory_entry entry : std::filesystem::recursive_directory_iterator(getSourcePath()))
 		{
 			if (entry.is_regular_file())
 			{
@@ -128,10 +128,12 @@ void Model::makeTree(Node* rootNode, const path& p)
 
 void Model::makeTree(const Node* rootNode, Node* parentNode, const path& p)
 {
+	using std::regex;
+
 	regex startCommentRegEx{ "[\\w\\W]*/\\* [\\w\\W] * " };
 	regex endCommentRegEx{ "[\\w\\W]*\\*/[\\w\\W]*" };
 
-	ifstream fstream{ p.c_str() };
+	std::ifstream fstream{ p.c_str() };
 	string s;
 	auto isCommentted{ false };
 

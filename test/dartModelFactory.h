@@ -7,8 +7,8 @@ class DartModelFactory:  public ModelFactory
 {
 public:
 	virtual ~DartModelFactory() {};
-	virtual shared_ptr <IModel> createModel()
+	virtual std::shared_ptr <IModel> createModel()
 	{
-		return make_shared<DartModel>();
+		return std::make_shared<DartModel>();
 	}
 };

@@ -3,6 +3,8 @@
 #include <iostream>
 #include <regex>
 
+using std::regex;
+
 DartModel::DartModel()
 	: languageSpecificIncludeSubline("package:" + getProjectName().filename().u8string())
 {

@@ -1,6 +1,9 @@
 #include <filesystem>
 #include "imodel.h"
 
+using std::string;
+using namespace std::filesystem;
+
 IModel::IModel()
 {
 	sourcePath.clear();

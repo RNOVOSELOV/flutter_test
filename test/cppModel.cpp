@@ -2,6 +2,8 @@
 #include <iostream>
 #include <regex>
 
+using std::regex;
+
 CppModel::CppModel()
 	: languageSpecificIncludeSubline ("\\#include")
 {

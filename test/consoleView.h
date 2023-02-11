@@ -7,15 +7,15 @@ class ConsoleView :
 {
 public:
     virtual ~ConsoleView();
-    virtual void showWelcome(const string directory);
-    virtual void showMessage(const string);
+    virtual void showWelcome(const std::string directory);
+    virtual void showMessage(const std::string);
 
-    virtual void showSourceTreeStructure(const vector <Node*>&);
-    virtual void showIncludeFrequencies(const vector<pair<string, int>>&);
+    virtual void showSourceTreeStructure(const std::vector <Node*>&);
+    virtual void showIncludeFrequencies(const std::vector<std::pair<std::string, int>>&);
 
     void startExploring(char value);
 
 private:
-    void printNodeTree(const Node* node, const string prefix = "");
+    void printNodeTree(const Node* node, const std::string prefix = "");
 };
 

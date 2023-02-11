@@ -7,8 +7,8 @@ class CppModelFactory : public ModelFactory
 {
 public:
 	virtual ~CppModelFactory() {};
-	virtual shared_ptr <IModel> createModel()
+	virtual std::shared_ptr <IModel> createModel()
 	{
-		return make_shared<CppModel>();
+		return std::make_shared<CppModel>();
 	}
 };

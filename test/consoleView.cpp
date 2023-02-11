@@ -3,6 +3,11 @@
 #include "consoleView.h"
 #include "node.h"
 
+using std::string;
+using std::cout;
+using std::endl;
+using std::cin;
+
 ConsoleView::~ConsoleView()
 {
 
@@ -27,7 +32,7 @@ void ConsoleView::startExploring(char value)
 	notifyPresenter(&IViewEvents::onWelcomeKeyPressed, value);
 }
 
-void ConsoleView::showSourceTreeStructure(const vector <Node*>& trees)
+void ConsoleView::showSourceTreeStructure(const std::vector <Node*>& trees)
 {
 	for (auto node : trees)
 	{
@@ -44,7 +49,7 @@ void ConsoleView::printNodeTree(const Node* node, const string prefix)
 	}
 	string notFoundSymbol = node->isFoundOnFilesystem ? "" : "DEL";
 	string duplicateSymbol = node->isDuplicate ? "REP" : "";
-	cout << " " << setw(3) << duplicateSymbol << " " << setw(3) << notFoundSymbol << " " << prefix << node->nodePath.filename().u8string() << endl;
+	cout << " " << std::setw(3) << duplicateSymbol << " " << std::setw(3) << notFoundSymbol << " " << prefix << node->nodePath.filename().u8string() << endl;
 
 	if (prefix.length() == 0 && node->childs.size() == 0)
 	{
@@ -56,7 +61,7 @@ void ConsoleView::printNodeTree(const Node* node, const string prefix)
 	}
 }
 
-void ConsoleView::showIncludeFrequencies(const vector<pair<string, int>>& includes)
+void ConsoleView::showIncludeFrequencies(const std::vector<std::pair<string, int>>& includes)
 {
 	cout  << endl;
 	for (auto p : includes)

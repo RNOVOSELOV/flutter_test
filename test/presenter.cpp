@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-Presenter::Presenter(shared_ptr<IView> view, shared_ptr<IModel> model)
+Presenter::Presenter(std::shared_ptr<IView> view, std::shared_ptr<IModel> model)
 	:	view(view),
 		model (model)
 {

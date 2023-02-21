@@ -1,6 +1,6 @@
 [<img src="https://isocpp.org/assets/images/cpp_logo.png"  width="50">](https://isocpp.org/) 
 
-# 🌳 Build source files dependency tree
+# 🌳 Build source files dependency tree 
 
 Консольное приложение, с помощью которого можно быстро проанализировать зависимости в исходных файлах. 
 ## О проекте

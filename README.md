@@ -91,5 +91,4 @@ UML диаграмма классов представлена ниже, либ�
     > WARNING! In \<filename\>: header \<library header\> not found in -I directories!
 
 
-
 [LICENSE](https://raw.githubusercontent.com/RNOVOSELOV/sources_analyzer/main/LICENSE)
